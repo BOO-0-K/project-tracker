@@ -1,5 +1,8 @@
 import { useDrag, useDrop } from "react-dnd";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import { toDoState } from "./atoms";
+import React from "react";
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,8 +35,6 @@ const Card = styled.div`
   background-color: ${(props) => props.theme.cardColor};
 `;
 
-const toDos = ["a", "b", "c", "d", "e", "f"];
-
 const ItemType = {
   CARD: "card",
 };
@@ -41,35 +42,60 @@ const ItemType = {
 interface IDraggableCardProps {
   toDo: string;
   index: number;
+  onDragEnd: (args: IDrag) => void;
 }
 
 interface IDroppableBoardProps {
   toDos: string[];
+  setToDos: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-function DraggableCard({ toDo, index }: IDraggableCardProps) {
-  const [_, ref] = useDrag({
+interface IDrag {
+  fromIndex: number;
+  toIndex: number;
+}
+
+function DraggableCard({ toDo, index, onDragEnd }: IDraggableCardProps) {
+  const [, drag] = useDrag({
     type: ItemType.CARD,
     item: { index },
   });
 
+  const [, drop] = useDrop({
+    accept: ItemType.CARD,
+    drop(item: { index: number }) {
+      if (item.index !== index) {
+        onDragEnd({ fromIndex: item.index, toIndex: index });
+      }
+    },
+  });
+
   return (
-    <Card ref={ref}>
+    <Card ref={(node) => drag(drop(node))}>
       {toDo}
     </Card>
   );
 }
 
-function DroppableBoard({ toDos }: IDroppableBoardProps) {
-  const [_, ref] = useDrop({
+function DroppableBoard({ toDos, setToDos }: IDroppableBoardProps) {
+  const onDragEnd = ({ fromIndex, toIndex }: IDrag) => {
+    setToDos((oldToDos) => {
+      const toDosCopy = [...oldToDos];
+      const [draggableId] = toDosCopy.splice(fromIndex, 1);
+      toDosCopy.splice(toIndex, 0, draggableId);
+      return toDosCopy;
+    });
+  };
+
+  const [, drop] = useDrop({
     accept: ItemType.CARD,
   });
 
   return (
-    <Board ref={ref}>
+    <Board ref={drop}>
       {
         toDos.map((toDo, index) => (
-          <DraggableCard key={index} toDo={toDo} index={index} />
+          <DraggableCard key={index} toDo={toDo} index={index} onDragEnd={onDragEnd} />
         ))
       }
     </Board>
@@ -77,10 +103,12 @@ function DroppableBoard({ toDos }: IDroppableBoardProps) {
 }
 
 function App() {
+  const [toDos, setToDos] = useRecoilState(toDoState);
+
   return (
     <Wrapper>
       <Layer>
-        <DroppableBoard toDos={toDos} />
+        <DroppableBoard toDos={toDos} setToDos={setToDos} />
       </Layer>
     </Wrapper>
   );

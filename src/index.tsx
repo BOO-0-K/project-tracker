@@ -6,6 +6,7 @@ import { theme } from "./theme";
 import { Reset } from "styled-reset";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { RecoilRoot } from "recoil";
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -29,12 +30,14 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <Reset />
-      <GlobalStyle />
-      <DndProvider backend={HTML5Backend}>
-        <App />
-      </DndProvider>
-    </ThemeProvider>
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <Reset />
+        <GlobalStyle />
+        <DndProvider backend={HTML5Backend}>
+          <App />
+        </DndProvider>
+      </ThemeProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );
