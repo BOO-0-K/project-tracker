@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { ItemType, toDoState } from "../atoms";
+import { ItemType, IToDoState } from "../atoms";
 import { useDrop } from "react-dnd";
 import DraggableCard from "./DraggableCard";
-import { useRecoilState } from "recoil";
 
 const Board = styled.div`
   padding: 20px 10px;
@@ -10,38 +9,85 @@ const Board = styled.div`
   background-color: ${(props) => props.theme.boardColor};
   border-radius: 5px;
   min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`;
+
+const Title = styled.h2`
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size:18px;
 `;
 
 interface IDrag {
     fromIndex: number;
     toIndex: number;
+    sourceId: string;
+    targetId: string;
 }
 
-function DroppableBoard() {
-    const [toDos, setToDos] = useRecoilState(toDoState);
+interface IDroppableBoardProps {
+  toDos: string[];
+  setToDos: React.Dispatch<React.SetStateAction<IToDoState>>;
+  boardId: string;
+  allBoards: IToDoState;
+}
 
-    const onDragEnd = ({ fromIndex, toIndex }: IDrag) => {
-        setToDos((oldToDos) => {
-          const toDosCopy = [...oldToDos];
-          const [draggableId] = toDosCopy.splice(fromIndex, 1);
-          toDosCopy.splice(toIndex, 0, draggableId);
-          return toDosCopy;
-        });
-      };
+function DroppableBoard({ toDos, setToDos, boardId, allBoards }: IDroppableBoardProps) {
+    const onDragEnd = ({ fromIndex, toIndex, sourceId, targetId }: IDrag) => {
+        if (sourceId === targetId) {
+            setToDos((allBoards) => {
+                const boardCopy = [...allBoards[sourceId]];
+                const [draggableId] = boardCopy.splice(fromIndex, 1);
+                boardCopy.splice(toIndex, 0, draggableId);
+                return {
+                  ...allBoards,
+                  [sourceId]: boardCopy,
+                };
+            });
+        } else {
+            setToDos((allBoards) => {
+              const sourceBoard = [...allBoards[sourceId]];
+              const targetBoard = [...allBoards[targetId]];
+              const [draggableId] = sourceBoard.splice(fromIndex, 1);
+              targetBoard.splice(toIndex, 0, draggableId);
+              return {
+                ...allBoards,
+                [sourceId]: sourceBoard,
+                [targetId]: targetBoard,
+              };
+            });
+        }
+    };
     
-      const [, drop] = useDrop({
+    const [, drop] = useDrop({
         accept: ItemType.CARD,
-      });
+        drop(item: { index: number, boardId: string }) {
+            const index = allBoards[boardId].length;
+            if (index === 0) {
+              onDragEnd({ 
+                  fromIndex: 
+                  item.index, 
+                  toIndex: index, 
+                  sourceId: item.boardId, 
+                  targetId: boardId, 
+              });
+            }
+        },
+    });
     
-      return (
+    return (
         <Board ref={drop}>
-          {
-            toDos.map((toDo, index) => (
-              <DraggableCard key={index} toDo={toDo} index={index} onDragEnd={onDragEnd} />
-            ))
-          }
+            <Title>{boardId}</Title>
+            {
+                toDos.map((toDo, index) => (
+                    <DraggableCard key={index} toDo={toDo} index={index} boardId={boardId} onDragEnd={onDragEnd} />
+                ))
+            }
         </Board>
-      );
+    );
 }
 
 export default DroppableBoard;
