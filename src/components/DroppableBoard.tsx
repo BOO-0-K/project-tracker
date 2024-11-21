@@ -13,13 +13,16 @@ const Board = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  cursor: move;
 `;
 
-const Title = styled.h2`
+const Title = styled.div`
   text-align: center;
   font-weight: 600;
   margin-bottom: 10px;
   font-size:18px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Form = styled.form`
@@ -37,6 +40,12 @@ const Form = styled.form`
         text-align: center;
         margin: 0 auto;
     }
+`;
+
+const DelBtn = styled.span`
+    color: tomato;
+    font-weight: 600;
+    cursor: pointer;
 `;
 
 interface IDrag {
@@ -120,9 +129,16 @@ function DroppableBoard({ toDos, setToDos, boardId, allBoards }: IDroppableBoard
         setValue("toDo", "");
     };
 
+    const onClickDelBtn = () => {
+    
+    };
+
     return (
         <Board ref={drop}>
-            <Title>{boardId}</Title>
+            <Title>
+                {boardId}
+                <DelBtn onClick={onClickDelBtn}>x</DelBtn>
+            </Title>
             <Form onSubmit={handleSubmit(onValid)}>
                 <input 
                     {...register("toDo", { required: true })} 

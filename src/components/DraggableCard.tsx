@@ -15,7 +15,7 @@ const Card = styled.div<{ $isDragging: boolean }>`
   margin-bottom: 5px;
   padding: 10px;
   background-color: ${(props) => props.$isDragging ? "#e4f2ff" : props.theme.cardColor};
-  cursor: pointer;
+  cursor: move;
   display: flex;
   justify-content: space-between;
 `;
