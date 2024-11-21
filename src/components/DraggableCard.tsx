@@ -1,7 +1,8 @@
 import { useDrag, useDrop } from "react-dnd";
 import styled from "styled-components";
-import { ItemType } from "../atoms";
+import { ItemType, toDoState } from "../atoms";
 import React from "react";
+import { useSetRecoilState } from "recoil";
 
 const Wrapper = styled.div`
     &:last-child {
@@ -15,6 +16,13 @@ const Card = styled.div<{ $isDragging: boolean }>`
   padding: 10px;
   background-color: ${(props) => props.$isDragging ? "#e4f2ff" : props.theme.cardColor};
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const DelBtn = styled.span`
+    color: tomato;
+    font-weight: 600;
 `;
 
 interface IDrag {
@@ -25,13 +33,14 @@ interface IDrag {
 }
 
 interface IDraggableCardProps {
+    toDoId: number;
     toDoText: string;
     index: number;
     boardId: string;
     onDragEnd: (args: IDrag) => void;
 }
 
-function DraggableCard({ toDoText, index, boardId, onDragEnd }: IDraggableCardProps) {
+function DraggableCard({ toDoId, toDoText, index, boardId, onDragEnd }: IDraggableCardProps) {
     const [{ isDragging }, drag] = useDrag({
         type: ItemType.CARD,
         item: { index, boardId },
@@ -53,10 +62,25 @@ function DraggableCard({ toDoText, index, boardId, onDragEnd }: IDraggableCardPr
         },
     });
     
+    const setToDos = useSetRecoilState(toDoState);
+    const onClickDelBtn = () => {
+        setToDos((allBoards) => {
+            const boardCopy = [...allBoards[boardId]];
+            const filteredBoard = boardCopy.filter((toDo) => {
+                return toDo.id !== toDoId;
+            });
+            return {
+                ...allBoards,
+                [boardId]: filteredBoard,
+            }
+        });
+    };
+
     return (
         <Wrapper ref={drop}>
             <Card ref={drag} $isDragging={isDragging}>
-            {toDoText}
+                {toDoText}
+                <DelBtn onClick={onClickDelBtn}>x</DelBtn>
             </Card>
         </Wrapper>
     );

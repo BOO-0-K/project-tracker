@@ -132,7 +132,7 @@ function DroppableBoard({ toDos, setToDos, boardId, allBoards }: IDroppableBoard
             </Form>
             {
                 toDos.map((toDo, index) => (
-                    <DraggableCard key={toDo.id} index={index} boardId={boardId} toDoText={toDo.text} onDragEnd={onDragEnd} />
+                    <DraggableCard key={toDo.id} index={index} boardId={boardId} toDoId={toDo.id} toDoText={toDo.text} onDragEnd={onDragEnd} />
                 ))
             }
         </Board>
