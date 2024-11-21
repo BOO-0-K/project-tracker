@@ -9,11 +9,12 @@ const Wrapper = styled.div`
     }
 `;
 
-const Card = styled.div<{ isDragging: boolean }>`
+const Card = styled.div<{ $isDragging: boolean }>`
   border-radius: 5px;
   margin-bottom: 5px;
   padding: 10px;
-  background-color: ${(props) => props.isDragging ? "#e4f2ff" : props.theme.cardColor};
+  background-color: ${(props) => props.$isDragging ? "#e4f2ff" : props.theme.cardColor};
+  cursor: pointer;
 `;
 
 interface IDrag {
@@ -24,13 +25,13 @@ interface IDrag {
 }
 
 interface IDraggableCardProps {
-    toDo: string;
+    toDoText: string;
     index: number;
     boardId: string;
     onDragEnd: (args: IDrag) => void;
 }
 
-function DraggableCard({ toDo, index, boardId, onDragEnd }: IDraggableCardProps) {
+function DraggableCard({ toDoText, index, boardId, onDragEnd }: IDraggableCardProps) {
     const [{ isDragging }, drag] = useDrag({
         type: ItemType.CARD,
         item: { index, boardId },
@@ -54,8 +55,8 @@ function DraggableCard({ toDo, index, boardId, onDragEnd }: IDraggableCardProps)
     
     return (
         <Wrapper ref={drop}>
-            <Card ref={drag} isDragging={isDragging}>
-            {toDo}
+            <Card ref={drag} $isDragging={isDragging}>
+            {toDoText}
             </Card>
         </Wrapper>
     );
