@@ -2,22 +2,37 @@ import { atom } from "recoil";
 
 export enum ItemType {
     "CARD" = "CARD",
+    "BOARD" = "BOARD",
 }
 
-export interface IToDo {
+export interface ICard {
     id: number;
     text: string;
 }
 
-export interface IToDoState {
-    [key: string]: IToDo[];
+export interface IBoard {
+    id: number;
+    text: string;
+    cards: ICard[];
 }
 
-export const toDoState = atom<IToDoState>({
+export const toDoState = atom<IBoard[]>({
     key: "toDo",
-    default: {
-        "To Do": [],
-        Doing: [],
-        Done: [],
-    },
+    default: [
+        {
+            id: 1,
+            text: "To Do",
+            cards: [],
+        },
+        {
+            id: 2,
+            text: "Doing",
+            cards: [],
+        },
+        {
+            id: 3,
+            text: "Done",
+            cards: [],
+        },
+    ]
 });

@@ -51,7 +51,8 @@ const Form = styled.form`
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
-
+  console.log(toDos);
+  
   return (
     <Wrapper>
       <Layer>
@@ -64,7 +65,7 @@ function App() {
           </Form>
         </Board>
         {
-          Object.keys(toDos).map(boardId => <DroppableBoard key={boardId} toDos={toDos[boardId]} setToDos={setToDos} boardId={boardId} allBoards={toDos} />)
+          toDos.map(board => <DroppableBoard key={board.id} toDos={board.cards} setToDos={setToDos} boardId={board.id} boardText={board.text} allBoards={board} />)
         }
       </Layer>
     </Wrapper>

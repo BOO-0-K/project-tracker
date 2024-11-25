@@ -28,19 +28,20 @@ const DelBtn = styled.span`
 interface IDrag {
     fromIndex: number;
     toIndex: number;
-    sourceId: string;
-    targetId: string;
+    sourceId: number;
+    targetId: number;
 }
 
 interface IDraggableCardProps {
     toDoId: number;
     toDoText: string;
     index: number;
-    boardId: string;
+    boardId: number;
+    boardText: string;
     onDragEnd: (args: IDrag) => void;
 }
 
-function DraggableCard({ toDoId, toDoText, index, boardId, onDragEnd }: IDraggableCardProps) {
+function DraggableCard({ toDoId, toDoText, index, boardId, boardText, onDragEnd }: IDraggableCardProps) {
     const [{ isDragging }, drag] = useDrag({
         type: ItemType.CARD,
         item: { index, boardId },
@@ -51,7 +52,7 @@ function DraggableCard({ toDoId, toDoText, index, boardId, onDragEnd }: IDraggab
     
       const [, drop] = useDrop({
         accept: ItemType.CARD,
-        drop(item: { index: number, boardId: string }) {
+        drop(item: { index: number, boardId: number }) {
             onDragEnd({ 
                 fromIndex: 
                 item.index, 
@@ -64,16 +65,16 @@ function DraggableCard({ toDoId, toDoText, index, boardId, onDragEnd }: IDraggab
     
     const setToDos = useSetRecoilState(toDoState);
     const onClickDelBtn = () => {
-        setToDos((allBoards) => {
-            const boardCopy = [...allBoards[boardId]];
-            const filteredBoard = boardCopy.filter((toDo) => {
-                return toDo.id !== toDoId;
-            });
-            return {
-                ...allBoards,
-                [boardId]: filteredBoard,
-            }
-        });
+        // setToDos((allBoards) => {
+        //     const boardCopy = [...allBoards];
+        //     const filteredBoard = boardCopy.filter((toDo) => {
+        //         return toDo.id !== toDoId;
+        //     });
+        //     return {
+        //         ...allBoards,
+        //         [boardId]: filteredBoard,
+        //     }
+        // });
     };
 
     return (
