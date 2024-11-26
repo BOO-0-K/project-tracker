@@ -23,6 +23,7 @@ const Card = styled.div<{ $isDragging: boolean }>`
 const DelBtn = styled.span`
     color: tomato;
     font-weight: 600;
+    cursor: pointer;
 `;
 
 interface IDrag {
@@ -65,16 +66,18 @@ function DraggableCard({ toDoId, toDoText, index, boardId, boardText, onDragEnd 
     
     const setToDos = useSetRecoilState(toDoState);
     const onClickDelBtn = () => {
-        // setToDos((allBoards) => {
-        //     const boardCopy = [...allBoards];
-        //     const filteredBoard = boardCopy.filter((toDo) => {
-        //         return toDo.id !== toDoId;
-        //     });
-        //     return {
-        //         ...allBoards,
-        //         [boardId]: filteredBoard,
-        //     }
-        // });
+        setToDos((allBoards) => {
+            const boardsCopy = [...allBoards];
+            const boardIndex = boardsCopy.findIndex((board) => {
+                return board.id === boardId;
+            });
+            const boardCopy = { ...allBoards[boardIndex] };
+            boardCopy.cards = boardCopy.cards.filter((card) => {
+                return card.id !== toDoId;
+            })
+            boardsCopy[boardIndex] = boardCopy;
+            return boardsCopy;
+        });
     };
 
     return (

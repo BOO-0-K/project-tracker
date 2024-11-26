@@ -203,7 +203,11 @@ function DroppableBoard({ toDos, setToDos, boardId, boardText, allBoards }: IDro
     };
 
     const onClickDelBtn = () => {
-    
+        setToDos((allBoards) => {
+            return allBoards.filter((board) => {
+                return board.id !== boardId;
+            });
+        });
     };
 
     return (

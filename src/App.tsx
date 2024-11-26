@@ -2,6 +2,7 @@ import styled from "styled-components";
 import DroppableBoard from "./components/DroppableBoard";
 import { useRecoilState } from "recoil";
 import { toDoState } from "./atoms";
+import { useForm } from "react-hook-form";
 
 const Wrapper = styled.div`
   display: flex;
@@ -49,16 +50,33 @@ const Form = styled.form`
     }
 `;
 
+interface IForm {
+  board: string;
+}
+
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
-  console.log(toDos);
+
+  const { register, setValue, handleSubmit } = useForm<IForm>();
+  const onValid = ({board}: IForm) => {
+    const newBoard = {
+      id: Date.now(),
+      text: board,
+      cards: [],
+    };
+    setToDos(allBoards => {
+      return [...allBoards, newBoard];
+    });
+    setValue("board", "");
+  };
   
   return (
     <Wrapper>
       <Layer>
         <Board>
-          <Form>
+          <Form onSubmit={handleSubmit(onValid)}>
             <input
+                {...register("board", { required: true })}
                 type="text" 
                 placeholder="+"
             />
