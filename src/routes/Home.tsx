@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import DroppableBoard from "../components/DroppableBoard";
 import { useRecoilState } from "recoil";
-import { toDoState } from "../atoms";
+import { toDoState } from "../recoil/todoAtom";
 import { useForm } from "react-hook-form";
 
 const Wrapper = styled.div`

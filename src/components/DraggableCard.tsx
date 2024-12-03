@@ -1,6 +1,6 @@
 import { useDrag, useDrop } from "react-dnd";
 import styled from "styled-components";
-import { ItemType, toDoState } from "../atoms";
+import { ItemType, toDoState } from "../recoil/todoAtom";
 import React from "react";
 import { useSetRecoilState } from "recoil";
 

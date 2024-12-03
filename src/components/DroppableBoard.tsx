@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { IBoard, ICard, ItemType } from "../atoms";
+import { IBoard, ICard, ItemType } from "../recoil/todoAtom";
 import { useDrag, useDrop } from "react-dnd";
 import DraggableCard from "./DraggableCard";
 import { useForm } from "react-hook-form";

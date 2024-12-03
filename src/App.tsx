@@ -1,17 +1,26 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./routes/Home";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./routes/Login";
+import styled from "styled-components";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (<ProtectedRoute>
+      <Layout />
+    </ProtectedRoute>),
     children: [
       {
         path: "",
         element: <Home />,
       },
     ]
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ],
 {
@@ -24,10 +33,18 @@ const router = createBrowserRouter([
   }
 });
 
+const Wrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+`;
+
 function App() {
   return (
     <>
-      <RouterProvider router={router} future={{ v7_startTransition: true }} />
+      <Wrapper>
+        <RouterProvider router={router} future={{ v7_startTransition: true }} />
+      </Wrapper>
     </>
   );
 }
