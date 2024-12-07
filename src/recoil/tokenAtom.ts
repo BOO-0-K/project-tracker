@@ -6,7 +6,7 @@ const { persistAtom } = recoilPersist({
     storage: localStorage,
 });
 
-export const tokenState = atom<string>({
+export const tokenState = atom<string | undefined>({
     key: "token",
     default: undefined,
     effects_UNSTABLE: [persistAtom],

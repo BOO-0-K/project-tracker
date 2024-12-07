@@ -10,7 +10,7 @@ interface IAuth {
 }
 
 // 로그인 API 호출 함수
-const fetchSignin = async (authData: IAuth) => {
+const fetchSignin = (authData: IAuth) => {
     return api.post("/users/signin", authData);
 };
 
@@ -33,3 +33,17 @@ export const useSigninMutation = () => {
         },
     });
 };
+
+// 로그아웃 함수
+export const useLogout = () => {
+    const setAccessToken = useSetRecoilState(tokenState);
+    const navigate = useNavigate();
+
+    const logout = () => {
+        setAccessToken(undefined);
+        localStorage.removeItem("localStorage");
+        navigate("/login");
+    }
+
+    return { logout };
+}
