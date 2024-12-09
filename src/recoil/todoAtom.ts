@@ -18,21 +18,5 @@ export interface IBoard {
 
 export const toDoState = atom<IBoard[]>({
     key: "toDo",
-    default: [
-        {
-            id: 1,
-            text: "To Do",
-            cards: [],
-        },
-        {
-            id: 2,
-            text: "Doing",
-            cards: [],
-        },
-        {
-            id: 3,
-            text: "Done",
-            cards: [],
-        },
-    ]
+    default: []
 });

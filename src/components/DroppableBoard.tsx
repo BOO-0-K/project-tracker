@@ -20,7 +20,7 @@ const Title = styled.div`
   text-align: center;
   font-weight: 600;
   margin-bottom: 10px;
-  font-size:18px;
+  font-size: 18px;
   display: flex;
   justify-content: space-between;
 `;

@@ -56,7 +56,7 @@ function Layout() {
                     ) : (
                         data?.templates.map((template: ITemplate, index: number) => {
                             return (
-                                <Link to={`/project/${template.id}`} key={template.id}>
+                                <Link to={`/todo/${template.id}`} key={template.id}>
                                     <SidebarItem>
                                         {template.name}
                                     </SidebarItem>

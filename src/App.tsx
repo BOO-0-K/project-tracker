@@ -4,6 +4,8 @@ import Home from "./routes/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./routes/Login";
 import styled from "styled-components";
+import Todo from "./routes/Todo";
+import NotFound from "./routes/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -16,12 +18,20 @@ const router = createBrowserRouter([
         path: "",
         element: <Home />,
       },
+      {
+        path: "todo/:templateId",
+        element: <Todo />,
+      }
     ]
   },
   {
     path: "/login",
     element: <Login />,
   },
+  {
+    path: "*",
+    element: <NotFound />,
+  }
 ],
 {
   future: {

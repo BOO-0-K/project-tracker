@@ -18,12 +18,12 @@ const Title = styled.h1`
   color: white;
 `;
 
-function Home() {
-  return (
-    <Wrapper>
-      <Title>좌측 템플릿을 선택해주세요.</Title>
-    </Wrapper>
-  );
+function NotFound() {
+    return (
+        <Wrapper>
+          <Title>없는 페이지 입니다.</Title>
+        </Wrapper>
+    );
 }
 
-export default Home;
+export default NotFound;
